@@ -20,10 +20,6 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       }
-    }, {
-      timestamps: false,
-      underscored: true,
-      tableName: 'users'
     });
   },
   down: async (queryInterface, Sequelize) => {
