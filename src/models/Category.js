@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  const Categories = sequelize.define('Categories', {
+  const Category = sequelize.define('Category', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     timestamps: false,
     underscored: true,
-    tableName: 'categoriess'
+    tableName: 'categories'
   });
-  return Categories;
+  return Category;
 };
