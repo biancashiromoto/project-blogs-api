@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     displayName: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      // field: 'display_name'
     },
     email: {
       type: DataTypes.STRING
@@ -26,5 +27,13 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
     tableName: 'users'
   });
+
+  User.associate = (models) => {
+    User.hasMany(models.BlogPost, {
+      foreignKey: 'user_id',
+      as: 'blog_posts',
+    })
+  }
+
   return User;
 };
