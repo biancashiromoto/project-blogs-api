@@ -14,7 +14,7 @@ module.exports = {
           model: 'blog_posts',
           key: 'id'
         },
-        // field: 'post_id'
+        field: 'post_id'
       },
       categoryId: {
         type: Sequelize.INTEGER,
@@ -22,7 +22,7 @@ module.exports = {
           model: 'categories',
           key: 'id'
         },
-        // field: 'category_id'
+        field: 'category_id'
       }
     })
   },
