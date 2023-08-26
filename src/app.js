@@ -16,6 +16,11 @@ app.get('/user', async (req, res) => {
   res.json(users);
 });
 
+app.post('/user', async (req, res) => {
+  const result = await userService.registerUser(req.body);
+  res.status(result.status).json(result.data);
+});
+
 app.get('/categories', async (req, res) => {
   const categories = await categoriesService.findAll();
   res.json(categories);
