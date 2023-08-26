@@ -1,5 +1,5 @@
 const express = require('express');
-const { User, Category } = require('./models');
+const { userService, categoriesService } = require('./services');
 const { loginController } = require('./controllers');
 
 const app = express();
@@ -12,12 +12,12 @@ app.get('/', (_request, response) => {
 app.use(express.json());
 
 app.get('/user', async (req, res) => {
-  const users = await User.findAll();
+  const users = await userService.findAll();
   res.json(users);
 });
 
 app.get('/categories', async (req, res) => {
-  const categories = await Category.findAll();
+  const categories = await categoriesService.findAll();
   res.json(categories);
 });
 
