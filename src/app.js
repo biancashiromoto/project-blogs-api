@@ -19,6 +19,7 @@ app.get('/user', async (req, res) => {
 app.post('/user', async (req, res) => {
   const { status, data } = await userService.registerUser(req.body);
   if (status === 400) return res.status(status).json(data);
+  if (status === 409) return res.status(status).json(data);
   res.status(status).json({ token: data });
 });
 
