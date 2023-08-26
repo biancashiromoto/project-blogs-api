@@ -1,3 +1,4 @@
+const generateToken = require('../helpers/generateToken');
 const { User, sequelize } = require('../models');
 const { userSchema } = require('./validations/schemas');
 
@@ -14,7 +15,10 @@ const registerUser = async (user) => {
 
   const result = await sequelize.transaction(async (transaction) => {
     const newUser = await User.create(value, { transaction });
-    return { status: 201, data: newUser.dataValues };
+
+    const token = generateToken(newUser);
+
+    return { status: 201, data: token };
   });
 
   return result;
