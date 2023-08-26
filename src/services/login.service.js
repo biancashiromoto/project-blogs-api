@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-
-const { JWT_SECRET } = process.env;
+const generateToken = require('../helpers/generateToken');
 
 const unauthenticated = {
   status: 'UNAUTHENTICATED',
@@ -10,18 +8,11 @@ const unauthenticated = {
 
 const loginService = async (email, password) => {
   const user = await User.findOne({ where: { email } });
-  console.log(user);
   if (!user || user.password !== password) {
     return unauthenticated;
   }
-  const jwtPayload = {
-    sub: user.id,
-  };
 
-  const token = jwt.sign(jwtPayload, JWT_SECRET, {
-    algorithm: 'HS256',
-    expiresIn: '7d',
-  });
+  const token = generateToken(user);
 
   return ({
     status: 'SUCCESS',
