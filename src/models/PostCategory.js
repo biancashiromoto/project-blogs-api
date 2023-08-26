@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       },
       primaryKey: true
-      // field: 'post_id'
     },
     categoryId: {
       type: DataTypes.INTEGER,
@@ -24,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       },
       primaryKey: true
-      // field: 'category_id'
     }
   }, {
     timestamps: false,
