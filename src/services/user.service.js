@@ -13,6 +13,12 @@ const registerUser = async (user) => {
     return { status: 400, data: { message: error.message } };
   }
 
+  const existingUser = await User.findOne({ where: { email: value.email } });
+  
+  if (existingUser) {
+    return { status: 409, data: { message: 'User already registered' } };
+  }
+
   const result = await sequelize.transaction(async (transaction) => {
     const newUser = await User.create(value, { transaction });
 
