@@ -20,6 +20,12 @@ app.get('/user', authMiddleware, async (req, res) => {
   res.status(status).json(data);
 });
 
+app.get('/user/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const { status, data } = await userService.findById(Number(id));
+  res.status(status).json(data);
+});
+
 app.post('/user', async (req, res) => {
   const { status, data } = await userService.registerUser(req.body);
   if (status === 400) return res.status(status).json(data);
