@@ -1,5 +1,5 @@
 const express = require('express');
-const { userService, categoriesService } = require('./services');
+const { userService, categoriesService, postsService } = require('./services');
 const { loginController } = require('./controllers');
 const authMiddleware = require('./middlewares/auth.middleware');
 
@@ -30,6 +30,15 @@ app.get('/categories', authMiddleware, async (req, res) => {
   const categories = await categoriesService.findAll();
   res.json(categories);
 });
+
+app.get(
+  '/post',
+    authMiddleware,
+    async (req, res) => {
+      const posts = await postsService.findAll();
+      res.json(posts);
+    },
+);
 
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
