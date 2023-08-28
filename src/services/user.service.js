@@ -6,7 +6,7 @@ const findAll = async () => {
   const users = await User.findAll({
     attributes: { exclude: ['password'] },
   });
-  return users;
+  return { status: 200, data: users };
 };
 
 const registerUser = async (user) => {

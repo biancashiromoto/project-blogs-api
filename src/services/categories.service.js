@@ -2,7 +2,7 @@ const { Category } = require('../models');
 
 const findAll = async () => {
   const categories = await Category.findAll();
-  return categories;
+  return { status: 200, data: categories };
 };
 
 module.exports = {

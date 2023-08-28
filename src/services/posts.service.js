@@ -18,7 +18,7 @@ const findAll = async () => {
     ],
     },
   );
-  return posts;
+  return { status: 200, data: posts };
 };
 
 module.exports = {

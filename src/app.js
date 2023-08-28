@@ -1,4 +1,5 @@
 const express = require('express');
+const { json } = require('sequelize');
 const { userService, categoriesService, postsService } = require('./services');
 const { loginController } = require('./controllers');
 const authMiddleware = require('./middlewares/auth.middleware');
@@ -15,8 +16,8 @@ app.use(express.json());
 app.post('/login', loginController);
 
 app.get('/user', authMiddleware, async (req, res) => {
-  const users = await userService.findAll();
-  res.json(users);
+  const { status, data } = await userService.findAll();
+  res.status(status).json(data);
 });
 
 app.post('/user', async (req, res) => {
@@ -27,13 +28,13 @@ app.post('/user', async (req, res) => {
 });
 
 app.get('/categories', authMiddleware, async (req, res) => {
-  const categories = await categoriesService.findAll();
-  res.json(categories);
+  const { status, data } = await categoriesService.findAll();
+  res.status(status).json(data);
 });
 
 app.get('/post', authMiddleware, async (req, res) => {
-  const posts = await postsService.findAll();
-  res.json(posts);
+  const { status, data } = await postsService.findAll();
+  res.status(status).json(data);
 });
 
 // É importante exportar a constante `app`,
