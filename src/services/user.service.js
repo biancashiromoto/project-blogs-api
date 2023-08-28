@@ -3,7 +3,9 @@ const { User, sequelize } = require('../models');
 const { userSchema } = require('./validations/schemas');
 
 const findAll = async () => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    attributes: { exclude: ['password'] },
+  });
   return users;
 };
 
