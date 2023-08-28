@@ -26,7 +26,7 @@ app.post('/user', async (req, res) => {
   res.status(status).json({ token: data });
 });
 
-app.get('/categories', async (req, res) => {
+app.get('/categories', authMiddleware, async (req, res) => {
   const categories = await categoriesService.findAll();
   res.json(categories);
 });
