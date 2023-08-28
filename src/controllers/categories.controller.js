@@ -6,6 +6,12 @@ const findAll = async (req, res) => {
   return res.status(mapStatusHTTP(status)).json(data);
 };
 
+const registerCategory = async (req, res) => {
+  const { status, data } = await categoriesService.registerCategory(req.body);
+  return res.status(mapStatusHTTP(status)).json(data);
+};
+
 module.exports = {
   findAll,
+  registerCategory,
 };
