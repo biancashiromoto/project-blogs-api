@@ -1,14 +1,21 @@
-const { BlogPost, User } = require('../models');
+const { BlogPost, User, Category } = require('../models');
 
 const findAll = async () => {
   const posts = await BlogPost.findAll(
     { 
       attributes: { exclude: ['user_id'] },
-      include: {
+      include: [{
         model: User,
         as: 'user',
         attributes: ['id', 'displayName', 'email', 'image'],
       },
+      {
+        model: Category,
+        as: 'categories',
+        attributes: ['id', 'name'],
+        through: { attributes: [] },
+      },
+    ],
     },
   );
   return posts;
