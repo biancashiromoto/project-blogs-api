@@ -31,14 +31,10 @@ app.get('/categories', authMiddleware, async (req, res) => {
   res.json(categories);
 });
 
-app.get(
-  '/post',
-    authMiddleware,
-    async (req, res) => {
-      const posts = await postsService.findAll();
-      res.json(posts);
-    },
-);
+app.get('/post', authMiddleware, async (req, res) => {
+  const posts = await postsService.findAll();
+  res.json(posts);
+});
 
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
