@@ -1,6 +1,6 @@
 const generateToken = require('../helpers/generateToken');
 const { User, sequelize } = require('../models');
-const { userSchema } = require('./validations/schemas');
+const { userSchema } = require('./validations/userSchema');
 
 const findAll = async () => {
   const users = await User.findAll({
