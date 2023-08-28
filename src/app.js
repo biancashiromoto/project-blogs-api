@@ -1,6 +1,6 @@
 const express = require('express');
 const { userService, categoriesService, postsService } = require('./services');
-const { loginController } = require('./controllers');
+const loginController = require('./controllers');
 const authMiddleware = require('./middlewares/auth.middleware');
 
 const app = express();
@@ -12,7 +12,7 @@ app.get('/', (_request, response) => {
 
 app.use(express.json());
 
-app.post('/login', loginController);
+app.post('/login', loginController.loginController);
 
 app.get('/user', authMiddleware, async (req, res) => {
   const { status, data } = await userService.findAll();

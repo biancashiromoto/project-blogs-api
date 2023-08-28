@@ -12,4 +12,4 @@ const loginController = async (req, res) => {
   res.status(200).json(data);
 };
 
-module.exports = { loginController };
+module.exports = loginController;
