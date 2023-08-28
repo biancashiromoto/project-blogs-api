@@ -6,19 +6,19 @@ const findAll = async () => {
   const users = await User.findAll({
     attributes: { exclude: ['password'] },
   });
-  return { status: 200, data: users };
+  return { status: 'SUCCESSFUL', data: users };
 };
 
 const registerUser = async (user) => {
   const { error, value } = userSchema.validate(user);
   if (error) {
-    return { status: 400, data: { message: error.message } };
+    return { status: 'INVALID_ENTRY', data: { message: error.message } };
   }
 
   const existingUser = await User.findOne({ where: { email: value.email } });
   
   if (existingUser) {
-    return { status: 409, data: { message: 'User already registered' } };
+    return { status: 'CONFLICT', data: { message: 'User already registered' } };
   }
 
   const result = await sequelize.transaction(async (transaction) => {
@@ -26,7 +26,7 @@ const registerUser = async (user) => {
 
     const token = generateToken(newUser);
 
-    return { status: 201, data: token };
+    return { status: 'CREATED', data: { token } };
   });
 
   return result;
@@ -37,8 +37,8 @@ const findById = async (id) => {
     attributes: { exclude: ['password'] },
   });
 
-  if (!user) return { status: 404, data: { message: 'User does not exist' } };
-  return { status: 200, data: user };
+  if (!user) return { status: 'NOT_FOUND', data: { message: 'User does not exist' } };
+  return { status: 'SUCCESSFUL', data: user };
 };
 
 module.exports = {

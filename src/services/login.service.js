@@ -15,7 +15,7 @@ const loginService = async (email, password) => {
   const token = generateToken(user);
 
   return ({
-    status: 'SUCCESS',
+    status: 'SUCCESSFUL',
     data: { token },
   });
 };
