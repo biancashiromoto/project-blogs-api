@@ -18,7 +18,7 @@ const findAll = async () => {
     ],
     },
   );
-  return { status: 200, data: posts };
+  return { status: 'SUCCESSFUL', data: posts };
 };
 
 const findById = async (id) => {
@@ -38,9 +38,9 @@ const findById = async (id) => {
     ],
   });
 
-  if (!post) return { status: 404, data: { message: 'Post does not exist' } };
+  if (!post) return { status: 'NOT_FOUND', data: { message: 'Post does not exist' } };
   
-  return { status: 200, data: post };
+  return { status: 'SUCCESSFUL', data: post };
 };
 
 module.exports = {
