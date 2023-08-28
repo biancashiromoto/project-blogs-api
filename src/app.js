@@ -1,5 +1,4 @@
 const express = require('express');
-const { json } = require('sequelize');
 const { userService, categoriesService, postsService } = require('./services');
 const { loginController } = require('./controllers');
 const authMiddleware = require('./middlewares/auth.middleware');
@@ -40,6 +39,12 @@ app.get('/categories', authMiddleware, async (req, res) => {
 
 app.get('/post', authMiddleware, async (req, res) => {
   const { status, data } = await postsService.findAll();
+  res.status(status).json(data);
+});
+
+app.get('/post/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const { status, data } = await postsService.findById(Number(id));
   res.status(status).json(data);
 });
 
