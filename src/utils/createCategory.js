@@ -1,8 +1,8 @@
 const { PostCategory } = require('../models');
 
-const createCategory = async (post, categories) => {
+const createCategory = async (postId, categories, transaction) => {
   const promises = categories.map(async (category) => {
-    await PostCategory.create({ post, categoryId: category });
+    await PostCategory.create({ postId, categoryId: category }, { transaction });
   });
   await Promise.all(promises);
 };
