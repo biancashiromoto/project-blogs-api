@@ -63,7 +63,7 @@ const registerPost = async (postInfo, userId) => {
     const result = await sequelize.transaction(async (transaction) => {
       const newPost = { title, content, userId, updated: new Date(), published: new Date() };
       const createdPost = await BlogPost.create(newPost, { transaction });
-      await createCategory(postInfo, categoryIds, transaction);
+      await createCategory(createdPost.id, categoryIds, transaction);
       return { status: 'CREATED', data: createdPost };
     });
     return result;
