@@ -73,7 +73,6 @@ const registerPost = async (postInfo, userId) => {
 };
 
 const updatePost = async (postInfo, userId, postId) => {
-  const { title, content } = postInfo;
   const post = await BlogPost.findByPk(postId);
 
   if (!post) return { status: 'NOT_FOUND', data: { message: 'Post does not exist' } };
