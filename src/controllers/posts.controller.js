@@ -13,7 +13,7 @@ const findById = async (req, res) => {
 };
 
 const registerPost = async (req, res) => {
-  const { status, data } = await postsService.registerPost(req.body);
+  const { status, data } = await postsService.registerPost(req.body, req.user.sub);
   return res.status(mapStatusHTTP(status)).json(data);
 };
 
