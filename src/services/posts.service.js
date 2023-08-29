@@ -1,4 +1,4 @@
-const { BlogPost, User, Category, PostCategory, sequelize } = require('../models');
+const { BlogPost, User, Category, sequelize } = require('../models');
 const categoriesExist = require('../utils/categoriesExist');
 const createCategory = require('../utils/createCategory');
 const findUser = require('../utils/findUser');
@@ -63,7 +63,7 @@ const registerPost = async (postInfo, userId) => {
     const result = await sequelize.transaction(async (transaction) => {
       const newPost = { title, content, userId, updated: new Date(), published: new Date() };
       const createdPost = await BlogPost.create(newPost, { transaction });
-      await PostCategory.bulkCreate([...categoryIds.map((id) => ({ categoryId: id, postId: newPost.id }))], { transaction });
+      await createCategory(postInfo, categoryIds, transaction);
       return { status: 'CREATED', data: createdPost };
     });
     return result;
