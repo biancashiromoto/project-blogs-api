@@ -10,6 +10,7 @@ const authMiddleware = (req, res, next) => {
     const token = authorization.split(' ')[1];
     const validToken = jwt.verify(token, JWT_SECRET);
     if (validToken) {
+      req.user = validToken;
       next();
     } else {
       return res.status(401).json({ message: 'Expired or invalid token' });
