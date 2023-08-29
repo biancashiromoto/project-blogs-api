@@ -1,5 +1,6 @@
-const { BlogPost, User, Category, sequelize } = require('../models');
+const { BlogPost, User, Category, PostCategory, sequelize } = require('../models');
 const categoriesExist = require('../utils/categoriesExist');
+const createCategory = require('../utils/createCategory');
 const findUser = require('../utils/findUser');
 const postSchema = require('./validations/postSchema');
 
@@ -46,24 +47,29 @@ const findById = async (id) => {
   return { status: 'SUCCESSFUL', data: post };
 };
 
-const registerPost = async (post) => {
-  const { categoryIds } = post;
-  const { error, value } = postSchema.validate(post);
+const registerPost = async (postInfo, userId) => {
+  const { title, content, categoryIds } = postInfo;
+  const { error } = postSchema.validate(postInfo);
+  
   if (error) return { status: 'INVALID_ENTRY', data: { message: error.message } };
   
   const allCategoriesExist = await categoriesExist(categoryIds);
-    if (!allCategoriesExist) {
-      return { status: 'INVALID_ENTRY', data: { message: 'one or more "categoryIds" not found' } };
-    }
-    
-  const result = await sequelize.transaction(async (transaction) => {
-    const currDate = new Date();
-    const newPost = await BlogPost.create(value, { transaction });
-    newPost.updated = currDate;
-    newPost.published = currDate;
-    return { status: 'CREATED', data: newPost };
-  });
-  return result;
+  
+  if (!allCategoriesExist) {
+    return { status: 'INVALID_ENTRY', data: { message: 'one or more "categoryIds" not found' } };
+  }
+  
+  try {
+    const result = await sequelize.transaction(async (transaction) => {
+      const newPost = { title, content, userId, updated: new Date(), published: new Date() };
+      const createdPost = await BlogPost.create(newPost, { transaction });
+      await PostCategory.bulkCreate([...categoryIds.map((id) => ({ categoryId: id, postId: newPost.id }))], { transaction });
+      return { status: 'CREATED', data: createdPost };
+    });
+    return result;
+  } catch (err) {
+    return { status: 'INTERNAL_SERVER_ERROR', data: { message: err.message } };
+  }
 };
 
 module.exports = {
