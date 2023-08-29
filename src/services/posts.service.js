@@ -1,4 +1,6 @@
 const { BlogPost, User, Category, sequelize } = require('../models');
+const categoriesExist = require('../utils/categoriesExist');
+const findUser = require('../utils/findUser');
 const postSchema = require('./validations/postSchema');
 
 const findAll = async () => {
@@ -45,18 +47,22 @@ const findById = async (id) => {
 };
 
 const registerPost = async (post) => {
+  const { categoryIds } = post;
   const { error, value } = postSchema.validate(post);
-  if (error) {
-    return { status: 'INVALID_ENTRY', data: { message: error.message } };
-  }
+  if (error) return { status: 'INVALID_ENTRY', data: { message: error.message } };
   
+  const allCategoriesExist = await categoriesExist(categoryIds);
+    if (!allCategoriesExist) {
+      return { status: 'INVALID_ENTRY', data: { message: 'one or more "categoryIds" not found' } };
+    }
+    
   const result = await sequelize.transaction(async (transaction) => {
+    const currDate = new Date();
     const newPost = await BlogPost.create(value, { transaction });
-    newPost.updated = new Date();
-    newPost.published = new Date();
+    newPost.updated = currDate;
+    newPost.published = currDate;
     return { status: 'CREATED', data: newPost };
   });
-
   return result;
 };
 
