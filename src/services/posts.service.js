@@ -1,7 +1,8 @@
 const { BlogPost, User, Category, sequelize } = require('../models');
 const categoriesExist = require('../utils/categoriesExist');
 const createCategory = require('../utils/createCategory');
-const postSchema = require('./validations/postSchema');
+const newPostSchema = require('./validations/newPostSchema');
+const updatePostSchema = require('./validations/updatePostSchema');
 
 const findAll = async () => {
   const posts = await BlogPost.findAll(
@@ -48,7 +49,7 @@ const findById = async (id) => {
 
 const registerPost = async (postInfo, userId) => {
   const { title, content, categoryIds } = postInfo;
-  const { error } = postSchema.validate(postInfo);
+  const { error } = newPostSchema.validate(postInfo);
   
   if (error) return { status: 'INVALID_ENTRY', data: { message: error.message } };
   
@@ -71,8 +72,31 @@ const registerPost = async (postInfo, userId) => {
   }
 };
 
+const updatePost = async (postInfo, userId, postId) => {
+  const { title, content } = postInfo;
+  const post = await BlogPost.findByPk(postId);
+
+  if (!post) return { status: 'NOT_FOUND', data: { message: 'Post does not exist' } };
+  if (post.userId !== userId) {
+    return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
+  }
+  
+  const { error } = updatePostSchema.validate(postInfo);
+
+  if (error) return { status: 'INVALID_ENTRY', data: { message: error.message } };
+
+  await BlogPost.update(postInfo, { where: { id: postId } });
+  const updatedPost = await BlogPost.findOne({ where: { id: postId },
+  include: [
+    { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    { model: Category, as: 'categories', through: { attributes: [] } },
+  ] });
+  return { status: 'SUCCESSFUL', data: updatedPost };
+};
+
 module.exports = {
   findAll,
   findById,
   registerPost,
+  updatePost,
 };

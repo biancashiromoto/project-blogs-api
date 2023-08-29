@@ -7,5 +7,6 @@ const postsRouter = express.Router();
 postsRouter.get('/', authMiddleware, postsController.findAll);
 postsRouter.get('/:id', authMiddleware, postsController.findById);
 postsRouter.post('/', authMiddleware, postsController.registerPost);
+postsRouter.put('/:id', authMiddleware, postsController.updatePost);
 
 module.exports = postsRouter;
