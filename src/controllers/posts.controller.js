@@ -12,7 +12,13 @@ const findById = async (req, res) => {
   return res.status(mapStatusHTTP(status)).json(data);
 };
 
+const registerPost = async (req, res) => {
+  const { status, data } = await postsService.registerPost(req.body);
+  return res.status(mapStatusHTTP(status)).json(data);
+};
+
 module.exports = {
   findAll,
   findById,
+  registerPost,
 };

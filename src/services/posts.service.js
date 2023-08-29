@@ -1,4 +1,5 @@
-const { BlogPost, User, Category } = require('../models');
+const { BlogPost, User, Category, sequelize } = require('../models');
+const postSchema = require('./validations/postSchema');
 
 const findAll = async () => {
   const posts = await BlogPost.findAll(
@@ -43,7 +44,24 @@ const findById = async (id) => {
   return { status: 'SUCCESSFUL', data: post };
 };
 
+const registerPost = async (post) => {
+  const { error, value } = postSchema.validate(post);
+  if (error) {
+    return { status: 'INVALID_ENTRY', data: { message: error.message } };
+  }
+  
+  const result = await sequelize.transaction(async (transaction) => {
+    const newPost = await BlogPost.create(value, { transaction });
+    newPost.updated = new Date();
+    newPost.published = new Date();
+    return { status: 'CREATED', data: newPost };
+  });
+
+  return result;
+};
+
 module.exports = {
   findAll,
   findById,
+  registerPost,
 };
