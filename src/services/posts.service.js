@@ -1,7 +1,6 @@
 const { BlogPost, User, Category, sequelize } = require('../models');
 const categoriesExist = require('../utils/categoriesExist');
 const createCategory = require('../utils/createCategory');
-const findUser = require('../utils/findUser');
 const postSchema = require('./validations/postSchema');
 
 const findAll = async () => {
